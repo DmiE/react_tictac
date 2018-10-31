@@ -77,14 +77,15 @@ import './index.css';
     constructor (props){
       super(props);
       this.state = {
-        history: [{squares: Array(9).fill(null)}], 
+        history: [{squares: Array(9).fill(null)}, {squares: Array(9).fill(null)}], 
         xIsNext: true};
     }
 
     handleClick = (i) => {
-      const history = this.state.history;
+      let history = this.state.history;
       const current = history[history.length - 1];
       const squares = current.squares.slice();    // thanks to slice method we create new array instead of mutating the old one.
+      const previousSquares = squares.slice();
       if (calculateWinner(squares) || squares[i]) {
         return;
       }
@@ -94,19 +95,34 @@ import './index.css';
       else if (this.state.xIsNext == false) {
         squares[i] = "O"
       }
+      history[0] = {squares: previousSquares};
+      history[1] = {squares: squares};
+      console.log(history[0])
+      console.log(history[1])
+
       this.setState({
-        history : history.concat([{
-          squares: squares}]),
+        history : history,
         xIsNext: !this.state.xIsNext});
     }
+
+    undoButton =() => {
+      let history = this.state.history;
+      const previousSquares = history[0];
+      console.log(previousSquares)
+      history[1] = previousSquares;
+
+      this.setState({
+        history: history
+      })
+
+    };
     
     render() {
       const history = this.state.history;
       const current = history[history.length - 1];
       const winner = calculateWinner(current.squares);
-
       let status
-      
+
       if (winner) {
         status = "Player " + (winner) + " won!"
       }
@@ -121,7 +137,7 @@ import './index.css';
           </div>
           <div className="game-info">
             <div>{status}</div>
-            <ol>{/* TODO */}</ol>
+            <button onClick={this.undoButton}>UNDO</button>
           </div>
         </div>
       );
