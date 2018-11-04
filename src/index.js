@@ -73,6 +73,19 @@ import './index.css';
     }
   }
   
+  function GameButton(props) {
+    if (props.history === props.previousSquares) {
+      return (
+        <button id="undoButtonOFF" onClick={props.onClick}>UNDO</button>
+      );}
+
+    else {
+      return (
+        <button id="undoButtonON" onClick={props.onClick}>UNDO</button>
+      );
+    }
+  }
+
   class Game extends React.Component {
     constructor (props){
       super(props);
@@ -105,15 +118,19 @@ import './index.css';
         xIsNext: !this.state.xIsNext});
     }
 
-    undoButton =() => {
+    undoButton = () => {
       let history = this.state.history;
       const previousSquares = history[0];
-      console.log(previousSquares)
-      history[1] = previousSquares;
 
-      this.setState({
-        history: history
-      })
+      if (history[1] !== previousSquares) {
+        history[1] = previousSquares;
+        this.setState({
+          history: history,
+          xIsNext: !this.state.xIsNext
+        })}
+      else {
+        return;
+      }
 
     };
     
@@ -124,10 +141,10 @@ import './index.css';
       let status
 
       if (winner) {
-        status = "Player " + (winner) + " won!"
+        status = "PLAYER " + (winner) + " WON!"
       }
       else {
-        status = 'Next player: ' + (this.state.xIsNext ? "X" : "O");
+        status = 'NEXT PLAYER: ' + (this.state.xIsNext ? "X" : "O");
       }
 
       return (
@@ -136,8 +153,9 @@ import './index.css';
             <Board squares={current.squares} onClick={(i) => this.handleClick(i)}/>
           </div>
           <div className="game-info">
-            <div>{status}</div>
-            <button onClick={this.undoButton}>UNDO</button>
+            <div id="statusInfo">{status}</div>
+            <button id="undoButton" onClick={this.undoButton}>UNDO</button>
+            <GameButton history={history[1]} previousSquares={history[0]} onClick={this.undoButton}>UNDO</GameButton>
           </div>
         </div>
       );
