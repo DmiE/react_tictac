@@ -74,6 +74,17 @@ import './index.css';
   }
   
   function GameButton(props) {
+    // const checkIfNotNull = (element) => {
+    //   console.log(element)
+    //   return (element !== null);
+    // }
+    
+    // if (props.history.squares.every(checkIfNotNull)){
+    //   return (
+    //     <button id="undoButtonOFF" onClick={props.onClick}>UNDO</button>
+    //   );
+    // }
+
     if (props.history === props.previousSquares) {
       return (
         <button id="undoButtonOFF" onClick={props.onClick}>UNDO</button>
@@ -110,8 +121,6 @@ import './index.css';
       }
       history[0] = {squares: previousSquares};
       history[1] = {squares: squares};
-      console.log(history[0])
-      console.log(history[1])
 
       this.setState({
         history : history,
@@ -119,20 +128,33 @@ import './index.css';
     }
 
     undoButton = () => {
-      let history = this.state.history;
+      let history = this.state.history.slice();
+      const firstBoard = history[0].squares;
+      const secondBoard = history[1].squares;
       const previousSquares = history[0];
 
-      if (history[1] !== previousSquares) {
-        history[1] = previousSquares;
-        this.setState({
-          history: history,
-          xIsNext: !this.state.xIsNext
-        })}
-      else {
-        return;
+      for (let i=0; i < firstBoard.length; i++) {
+        if (firstBoard[i] !== secondBoard[i]) {
+          history[1] = previousSquares;
+          this.setState({
+            history: history,
+            xIsNext: !this.state.xIsNext
+          })
+        }
       }
+      
 
     };
+
+    resetButton = () => {
+      const history = [{squares: Array(9).fill(null)}, {squares: Array(9).fill(null)}];
+      const xIsNext = true;
+
+      this.setState({
+        history: history,
+        xIsNext: xIsNext
+      })
+    }
     
     render() {
       const history = this.state.history;
@@ -154,8 +176,8 @@ import './index.css';
           </div>
           <div className="game-info">
             <div id="statusInfo">{status}</div>
-            <button id="undoButton" onClick={this.undoButton}>UNDO</button>
             <GameButton history={history[1]} previousSquares={history[0]} onClick={this.undoButton}>UNDO</GameButton>
+            <button id="resetButton" onClick={this.resetButton}>RESET</button>
           </div>
         </div>
       );
