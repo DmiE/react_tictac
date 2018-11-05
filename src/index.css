@@ -71,7 +71,21 @@ ol, ul {
   margin: 0 auto;
 }
 
-#undoButton {
+#resetButton {
+  display: block;
+  width: 360px;
+  height: 70px;
+  margin: 10px auto;
+  text-align: center;
+  font-size: 50px;
+  font-weight: 100;
+  background-color: #f7e88e;
+  background-image: linear-gradient(to left, #f3a835, #f7e88e);
+  color: white;
+  border: 3px solid white;
+}
+
+#undoButtonON {
   display: block;
   width: 360px;
   height: 70px;
@@ -81,6 +95,20 @@ ol, ul {
   font-weight: 100;
   background-color: #f7e88e;
   background-image: linear-gradient(to left, #f3a835, #f7e88e);
+  color: white;
+  border: 3px solid white;
+}
+
+#undoButtonOFF {
+  display: block;
+  width: 360px;
+  height: 70px;
+  margin: auto;
+  text-align: center;
+  font-size: 50px;
+  font-weight: 100;
+  background-color: grey;
+  //background-image: linear-gradient(to left, #f3a835, #f7e88e);
   color: white;
   border: 3px solid white;
 }
